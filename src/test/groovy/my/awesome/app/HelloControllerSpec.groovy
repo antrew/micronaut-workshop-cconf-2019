@@ -21,13 +21,12 @@ class HelloControllerSpec extends Specification {
     @AutoCleanup @Inject @Client("/")
     RxHttpClient client
 
-
-
-    void "test index"() {
+    void "test hello"() {
         given:
-        HttpResponse response = client.toBlocking().exchange("/hello")
-
+        def client = embeddedServer.getApplicationContext().getBean(HelloClient.class);
         expect:
-        response.status == HttpStatus.OK
+        HelloMessage serverResponse = client.index("codecentric");
+
+        "Hello codecentric!" == serverResponse.greeting
     }
 }
